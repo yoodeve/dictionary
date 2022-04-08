@@ -1,7 +1,7 @@
 // word.js
 import { db } from "../../firebase"
-import { collection, getDocs, addDoc, getDoc, Firestore, doc, updateDoc } 
-from "firebase/firestore";
+import { collection, getDocs, addDoc, getDoc, Firestore, doc, updateDoc }
+    from "firebase/firestore";
 
 // Actions
 const LOAD = 'word/LOAD';
@@ -21,8 +21,8 @@ export function createWord(word) {
     return { type: CREATE, word };
 }
 
-export function updateWord(word_index){
-    return { type : UPDATE, word_index } ;
+export function updateWord(word_index) {
+    return { type: UPDATE, word_index };
 }
 
 //middlewares 파이어베이스와 통신하는 함수, 파이어스토어에서 데이터 가져오는 함수, 리덕스 청크(함수 리턴) 여기서 씀
@@ -45,7 +45,7 @@ export const loadWordFB = () => {
 export const createWordFB = (word) => {
     return async function (dispatch) {
         const docRef = await addDoc(collection(db, "diction"), word);
-        const word_data = await {id:docRef.id, ...word}
+        const word_data = await { id: docRef.id, ...word }
         console.log(word_data)
         dispatch(createWord(word_data))
     };
@@ -53,19 +53,19 @@ export const createWordFB = (word) => {
 
 //U 미들웨어
 export const updateWordFB = (word_idx) => {
-    console.log("워드인덱스:"+word_idx);
+    console.log("워드인덱스:" + word_idx);
     return async function (dispatch, getState) {
-        if (!word_idx){
+        if (!word_idx) {
             return;
         }
-    const docRef = doc(db, "diction", word_idx);//firebase연결 객체
-    await updateDoc(docRef, {remem : true});
-    window.location.reload()
-    const _word_list = getState().word.list
-    const word_index = _word_list.findIndex((w)=>{
-        return w.id === word_index;
-    })
-    dispatch(updateWord(word_index));
+        const docRef = doc(db, "diction", word_idx);//firebase연결 객체
+        await updateDoc(docRef, { remem: true });
+        window.location.reload()
+        const _word_list = getState().word.list
+        const word_index = _word_list.findIndex((w) => {
+            return w.id === word_index;
+        })
+        dispatch(updateWord(word_index));
     }
 }
 
